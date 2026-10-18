@@ -1,0 +1,8 @@
+# 被测系统
+fastapi==0.143.3
+uvicorn==0.54.0
+
+# 测试框架
+pytest==9.1.1
+requests==2.34.2
+allure-pytest==2.16.2
