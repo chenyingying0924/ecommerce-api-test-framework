@@ -1,0 +1,32 @@
+name: API Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 启动被测服务（独立测试库）
+        run: |
+          SHOP_DB_PATH=test_shop.db uvicorn app.main:app --port 8000 &
+          sleep 3
+
+      - name: 运行测试
+        env:
+          SHOP_DB_PATH: test_shop.db
+          BASE_URL: http://127.0.0.1:8000
+        run: pytest tests/ -v
